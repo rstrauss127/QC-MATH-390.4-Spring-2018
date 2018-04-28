@@ -184,7 +184,7 @@ coef(anova_new)
 
 What would extrapolation look like in this model? We never covered this in class explicitly.
 
-Extrapolating in this model would be creating addition color classes.
+Extrapolating in this model would be creating additional color classes.
 **TO-DO
 
 4. Use `lm` to run a least squares linear regression using all available features to explain diamond price. 
@@ -233,14 +233,18 @@ It seems more exponential
 Upgrade your model in #4 to use one polynomial term for carat.
 
 ```{r}
-#TO-DO
+lm_five = lm(price ~ poly(carat, 2) + cut + color + clarity + depth + table + x + y + z, diamonds)
 
 ```
 
 What is $b$, $R^2$ and the RMSE? 
 
+$b = [21804.31, 1536647.48, -76105.46, 538.33, 807.51, 747.70, 678.32, -209.44, -284.55, -496.85, -997.60, -1469.25, -2357.80, 5243.52, 3565.41, 2605.54, 4475.44, 4163.35, 4904.23, 4843.80, -116.23, -36.37, -2123.01, -23.46, -83.11]$
+$R^2=0.92$, $RMSE = 1118.162$
 ```{r}
-#TO-DO
+b_five = lm_five$coefficients 
+r_sq_five = summary(lm_five)$r.squared
+rmse_five = summary(lm_five)$sigma
 ```
 
 Interpret each element in $b$ just like previously. You can copy most of the text from the previous question but be careful. There is one tricky thing to explain.
@@ -249,12 +253,14 @@ Interpret each element in $b$ just like previously. You can copy most of the tex
 
 Is this an improvement over the model in #4? Yes/no and why.
 
-**TO-DO
+In model_4, $R^2=0.920$ and $RMSE = 1130.094$. Model_5 is a slight improvement on model_4 because $R^2$ increased to $0.972$ and $RMSE$ decreased to $1118.16$
 
 Define a function $g$ that makes predictions given a vector of the same features in $\mathbb{D}$.
 
 ```{r}
-#TO-DO
+g <- function(features_matrix) {
+  predict(lm_five, features_matrix)
+}
 ```
 
 6. Use `lm` to run a least squares linear regression using a polynomial of color of degree 2 to explain price.  
@@ -297,7 +303,6 @@ e = y- yhat #residuals
 SSE = t(e) %*% e
 MSE = 1/(ncol(X)) * SSE
 RMSE = sqrt(MSE)
-RMSE
 #R^2
 s_sq_y = var(y)
 s_sq_e = var(e)
