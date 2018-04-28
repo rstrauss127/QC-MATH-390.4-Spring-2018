@@ -19,6 +19,7 @@ pacman::p_load(ggplot2)
 ```
 
 The dataset `diamonds` is in the namespace now as it was loaded with the `ggplot2` package. Run the following code and write about the dataset below.
+It's a dataset of a sample of about 54,000 diamonds and their various features.
 
 ```{r}
 ?diamonds
@@ -106,7 +107,7 @@ ggplot(diamonds, aes(color, clarity)) + geom_jitter(aes(col = price), size = .02
 ```
 
 Does diamond clarity appear to be mostly independent of diamond color?
-Sure
+Clarity and Color appear mostly indepedent here. It's hard to tell the distribution of price in the densely populated boxes because they dots overlap and the darker colors are more obvious to the naked eye. 
 
 2. Use `lm` to run a least squares linear regression using depth to explain price. 
 
@@ -162,8 +163,7 @@ sd(diamonds$price)
 ```
 
 Are these metrics expected given the appropriate or relevant visualization(s) above?
-Yes, there's not a strong relationship between the two.
-
+No these mterics are not expected. The color of the diamonds is rated D-J(best to worst) and intuitively, better diamonds cost more money. However, this anova model returned the highest slope for the worst color diamond and the second highest slope for the second worst color etc.
 
 Our model only included one feature - why are there more than two estimates in $b$?
 
@@ -182,8 +182,9 @@ anova_new = lm(price ~ 0 + color, diamonds)
 coef(anova_new)
 ```
 
-/*What would extrapolation look like in this model? We never covered this in class explicitly.*/
+What would extrapolation look like in this model? We never covered this in class explicitly.
 
+Extrapolating in this model would be creating addition color classes.
 **TO-DO
 
 4. Use `lm` to run a least squares linear regression using all available features to explain diamond price. 
@@ -201,12 +202,11 @@ summary(lm_four)$sigma #RMSE
 ```
 
 Interpret all entries in the vector $b$.
-For each unit increment in each x, the prcice will increase or decrease by the coressponding value of b
+For each unit increment in each x, the price will increase (or decrease if is negative) by the coressponding value of b
 
 
 Are these metrics expected given the appropriate or relevant visualization(s) above? Can you tell from the visualizations?
-
-**TO-DO*/
+I can't tell from from the visualizations. This model be a hyper plane in a high dimension, thus being impossible to visualize. 
 
 Comment on why $R^2$ is high. Think theoretically about diamonds and what you know about them.
 
@@ -217,17 +217,18 @@ Do you think you overfit? Comment on why or why not but do not do any numerical 
 I think this is an overfit because we are building the model with all the data points given. when we are given new data on diamonds this model will fail because it was tailored too finely.
 
 
-/*Create a visualization that shows the "original residuals" (i.e. the prices minus the average price) and the model residuals.*/
+Create a visualization that shows the "original residuals" (i.e. the prices minus the average price) and the model residuals.
  
 ```{r}
+og_residuals = diamonds$price - mean(diamonds$price)
 
-
+ggplot(diamonds) +aes(og_residuals, lm_four$residuals) + geom_jitter()
 ```
 
 
-5. /*Reference your visualizations above. Does price vs. carat appear linear?*/
+5. Reference your visualizations above. Does price vs. carat appear linear?
 
-** TO-DO
+It seems more exponential
 
 Upgrade your model in #4 to use one polynomial term for carat.
 
